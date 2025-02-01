@@ -7,14 +7,15 @@ function Login() {
     const [password, setPassword] = useState("");
     const navigate = useNavigate();
 
-
     const handleLogin = async(e) => {
        e.preventDefault();
        try{
            const response = await API.post("/auth/login",{email,password})
-           console.log("Login Response",response);
-           navigate('/dashboard');
-       }catch(error){
+           if(response.status === 200 && response.data.token){
+               localStorage.setItem("token",response.data.token);
+               navigate('/dashboard');
+           }
+       } catch(error){
            console.error(`Some error occcured ${error}`);
        }
     }
