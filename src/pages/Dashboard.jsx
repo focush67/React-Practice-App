@@ -16,6 +16,7 @@ function Dashboard() {
     function handleLogout() {
         localStorage.removeItem("token");
         setToken(null);
+        navigate("/");
     }
 
     const fetchTasks = async () => {
