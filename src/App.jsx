@@ -6,9 +6,12 @@ import Navbar from "./components/Navbar";
 import "./index.css"
 import AuthRedirect from "./components/AuthRedirect.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
+import {Toaster} from "react-hot-toast";
 
 function App() {
     return (
+        <>
+            <Toaster position="bottom-right" reverseOrder={false}/>
         <Router>
             <Navbar />
             <Routes>
@@ -22,6 +25,7 @@ function App() {
                 </Route>
             </Routes>
         </Router>
+        </>
     );
 }
 

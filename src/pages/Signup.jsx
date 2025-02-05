@@ -1,24 +1,36 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import InputField from "../components/InputField";
 import API from "../axiosInstance.js";
+import toast from 'react-hot-toast';
 
 function Signup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
+    const navigate = useNavigate();
+
     async function handleSignup(e) {
         e.preventDefault();
         if (password !== confirmPassword) {
             setError("Passwords do not match!");
+            toast.error('Passwords do not match. Please try again.');
             return;
         }
         try{
             const response = await API.post("/auth/signup",{email,password})
             console.log("Signup Response",response);
+            if(response.status === 201){
+                toast.success(`Account Successfully Created. Proceed to Login`)
+                navigate("/");
+            }
+            else if(response.status === 409){
+                toast.error("User already exists. Please login");
+            }
         }catch(error){
             console.error(`Some error occcured ${error}`);
+            toast.error(`Signup Failed : Please Try Again`)
         }
         setError("");
     }

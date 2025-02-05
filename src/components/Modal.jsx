@@ -19,7 +19,7 @@ const Modal = ({ isOpen, onClose, title, description, children }) => {
                 {children}
 
                 <button
-                    className="mt-4 bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400 w-full"
+                    className="mt-4 bg-gray-300 px-4 py-2 rounded-md hover:bg-gray-400 w-full hover:cursor-pointer"
                     onClick={onClose}
                 >
                     Close

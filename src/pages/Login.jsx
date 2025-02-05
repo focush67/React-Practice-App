@@ -1,6 +1,7 @@
 import {useState, useCallback, useEffect} from "react";
 import {Link, useNavigate} from "react-router-dom";
 import API from "../axiosInstance.js";
+import toast from 'react-hot-toast'
 
 function Login() {
     const [email, setEmail] = useState("");
@@ -12,11 +13,18 @@ function Login() {
        try{
            const response = await API.post("/auth/login",{email,password})
            if(response.status === 200 && response.data.token){
+               toast.success('Logging In')
                localStorage.setItem("token",response.data.token);
                navigate('/dashboard');
            }
        } catch(error){
-           console.error(`Some error occcured ${error}`);
+           if(error.status === 400){
+               toast.error('Invalid Credentials.');
+           } else if(error.status === 401){
+               toast.error(`Please register your account first`);
+           } else{
+               toast.error(`Could not log in. Please try again later.`)
+           }
        }
     }
 
