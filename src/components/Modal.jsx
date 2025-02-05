@@ -5,7 +5,8 @@ const Modal = ({ isOpen, onClose, title, description, children }) => {
         <Dialog.Root open={isOpen} onOpenChange={onClose}>
             <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm" />
             <Dialog.Content
-                className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-8 rounded-lg shadow-lg w-[500px]"
+                className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white
+                p-4 sm:p-8 rounded-lg shadow-lg w-[90%] sm:max-w-[500px] max-h-[90vh] overflow-auto"
                 aria-describedby="modal-description"
             >
                 <Dialog.Title className="text-xl font-semibold mb-2">{title}</Dialog.Title>

@@ -12,7 +12,8 @@ function Dashboard() {
     const [adhocCount, setAdhocCount] = useState(0);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newTask, setNewTask] = useState({ title: "", description: "", type: "habit", habitTime: "", deadline: "" });
-
+    const [isEditMode, setEditMode] = useState(false);
+    const [currentTask, setCurrentTask] = useState(null);
     const countdownRefs = useRef({});
 
     function handleLogout() {
@@ -96,7 +97,6 @@ function Dashboard() {
                     timeLeftText = formatTimeLeft(timeLeft);
                 }
 
-                // ✅ Directly update the DOM (bypassing React re-renders)
                 if (countdownRefs.current[task._id] !== timeLeftText) {
                     countdownRefs.current[task._id] = timeLeftText;
                     document.getElementById(`countdown-${task._id}`).innerText = timeLeftText;
@@ -125,12 +125,26 @@ function Dashboard() {
 
     const handleSaveTask = async () => {
         try {
-            const response = await API.post("/tasks", newTask);
-            console.log("Task Created:", response.data);
+            if(isEditMode && currentTask){
+                const response = await API.patch(`/tasks/${currentTask._id}`,newTask);
+                if(response.status === 201) {
+                    toast.success(`Task Updated Successfully`);
+                }
+            }
+            else{
+                const response = await API.post("/tasks", newTask);
+                if(response.status === 201){
+                    toast.success("New Task Created")
+                }
+            }
+
             await fetchTasks();
             setIsModalOpen(false);
+            setEditMode(false);
+            setCurrentTask(null);
             setNewTask({ title: "", description: "", type: "habit", habitTime: "", deadline: "" });
         } catch (error) {
+            toast.error(`Error in saving task. Please try again later`)
             console.error("Error saving task:", error.response?.data?.message || "Something went wrong");
         }
     };
@@ -144,7 +158,12 @@ function Dashboard() {
         }
     };
 
-
+    const handleEditTask = (task) => {
+        setCurrentTask(task);
+        setNewTask(task);
+        setEditMode(true);
+        setIsModalOpen(true);
+    }
     return (
         <div className="min-h-screen p-6 bg-gray-100">
             <div className="flex justify-between items-center bg-white p-4 rounded shadow-md">
@@ -191,12 +210,17 @@ function Dashboard() {
                                 <span id={`countdown-${task._id}`} className="text-red-500 text-sm">
                         {countdownRefs.current[task._id] || "Loading..."}
                     </span>
-
                                 <input
                                     type="checkbox"
                                     onChange={() => handleTaskDeletion(task._id)}
                                     className="ml-4 cursor-pointer w-5 h-5"
                                 />
+                                <button
+                                    className="text-blue-500 hover:text-blue-700 text-sm ml-2"
+                                    onClick={() => handleEditTask(task)}
+                                >
+                                    ✏️ Edit
+                                </button>
                             </li>
                         ))}
                     </ul>
@@ -207,15 +231,66 @@ function Dashboard() {
             <Modal
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
-                title="Create New Task"
-                description="Enter details for your new task. Habit tasks require a time, while Adhoc tasks require a deadline."
+                title={isEditMode ? "Update Task" : "Create New Task"}
+                description="Habit tasks require a time, while Adhoc tasks require a deadline."
             >
-                <input type="text" name="title" placeholder="Task Title" value={newTask.title} onChange={handleInputChange} className="w-full border p-2 rounded mb-2" />
-                <textarea name="description" placeholder="Task Description" value={newTask.description} onChange={handleInputChange} className="w-full border p-2 rounded mb-2 h-24" />
-                <button className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full hover:cursor-pointer" onClick={handleSaveTask}>
-                    Save Task
+                <input
+                    type="text"
+                    name="title"
+                    placeholder="Task Title"
+                    value={newTask.title}
+                    onChange={handleInputChange}
+                    className="w-full border p-2 rounded mb-2"
+                />
+
+                <textarea
+                    name="description"
+                    placeholder="Task Description"
+                    value={newTask.description}
+                    onChange={handleInputChange}
+                    className="w-full border p-2 rounded mb-2 h-24"
+                />
+
+
+                <label className="block text-sm font-medium text-gray-700 mb-1">Task Type</label>
+                <select
+                    name="type"
+                    value={newTask.type}
+                    onChange={handleInputChange}
+                    className="w-full border p-2 rounded mb-2"
+                >
+                    <option value="habit">Habit</option>
+                    <option value="adhoc">Adhoc</option>
+                </select>
+
+                {newTask.type === "habit" && (
+                    <input
+                        type="time"
+                        name="habitTime"
+                        value={newTask.habitTime}
+                        onChange={handleInputChange}
+                        className="w-full border p-2 rounded mb-2"
+                    />
+                )}
+
+                {newTask.type === "adhoc" && (
+                    <input
+                        type="datetime-local"
+                        name="deadline"
+                        value={newTask.deadline}
+                        onChange={handleInputChange}
+                        className="w-full border p-2 rounded mb-2"
+                    />
+                )}
+
+                <button
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full hover:cursor-pointer"
+                    onClick={handleSaveTask}
+                >
+                    {isEditMode ? 'Update Task' : 'Save Task'}
                 </button>
             </Modal>
+
         </div>
     );
 }
