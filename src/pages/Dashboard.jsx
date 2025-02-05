@@ -195,36 +195,33 @@ function Dashboard() {
 
             <div className="mt-6 bg-white p-4 rounded shadow-md">
                 <h3 className="text-lg font-semibold text-gray-800 mb-3">Your Tasks</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                    {tasks.map(task => (
+                        <div key={task._id} className="bg-gray-50 p-4 rounded-lg shadow-md flex flex-col">
+                            <h4 className={`text-lg font-semibold ${task.type === "habit" ? "text-blue-500" : "text-green-500"}`}>
+                                {task.title}
+                            </h4>
+                            <p className="text-sm text-red-500 mt-1" id={`countdown-${task._id}`}>
+                                {countdownRefs.current[task._id] || "Loading..."}
+                            </p>
 
-                {tasks.length === 0 ? (
-                    <p className="text-gray-500">No tasks available.</p>
-                ) : (
-                    <ul className="divide-y divide-gray-200">
-                        {tasks.map(task => (
-                            <li key={task._id} className="p-3 flex justify-between items-center">
-
-                                <span className={`font-medium ${task.type === "habit" ? "text-blue-500" : "text-green-500"}`}>
-                        {task.title}
-                    </span>
-
-                                <span id={`countdown-${task._id}`} className="text-red-500 text-sm">
-                        {countdownRefs.current[task._id] || "Loading..."}
-                    </span>
-                                <input
-                                    type="checkbox"
-                                    onChange={() => handleTaskDeletion(task._id)}
-                                    className="ml-4 cursor-pointer w-5 h-5"
-                                />
+                            <div className="flex justify-between mt-3">
                                 <button
-                                    className="text-blue-500 hover:text-blue-700 text-sm ml-2"
+                                    className="text-blue-500 hover:text-blue-700 text-sm"
                                     onClick={() => handleEditTask(task)}
                                 >
                                     ✏️ Edit
                                 </button>
-                            </li>
-                        ))}
-                    </ul>
-                )}
+                                <button
+                                    className="text-red-500 hover:text-red-700 text-sm"
+                                    onClick={() => handleTaskDeletion(task._id)}
+                                >
+                                    🗑 Delete
+                                </button>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
 
 
