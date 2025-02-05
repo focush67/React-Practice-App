@@ -165,9 +165,10 @@ function Dashboard() {
         setIsModalOpen(true);
     }
     return (
-        <div className="min-h-screen p-6 bg-gray-100">
-            <div className="flex justify-between items-center bg-white p-4 rounded shadow-md">
-                <h2 className="text-xl font-semibold text-gray-800">Task Dashboard</h2>
+        <div className={`min-h-screen p-6`}>
+
+        <div className="flex justify-between items-center  p-4 rounded shadow-md">
+                <h2 className="text-xl font-semibold">Task Dashboard</h2>
                 <button
                     className="bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 hover:cursor-pointer"
                     onClick={handleLogout}
@@ -177,27 +178,27 @@ function Dashboard() {
             </div>
 
             <div className="grid grid-cols-3 gap-4 mt-6">
-                <div className="bg-white p-4 rounded shadow-md text-center">
-                    <h3 className="text-lg font-semibold text-gray-700">Habit Tasks</h3>
-                    <p className="text-2xl font-bold text-blue-500">{habitCount}</p>
+                <div className="p-4 rounded shadow-md text-center">
+                    <h3 className="text-lg font-semibold">Habit Tasks</h3>
+                    <p className="text-2xl text-blue-700 font-bold ">{habitCount}</p>
                 </div>
-                <div className="bg-white p-4 rounded shadow-md text-center">
-                    <h3 className="text-lg font-semibold text-gray-700">Adhoc Tasks</h3>
-                    <p className="text-2xl font-bold text-green-500">{adhocCount}</p>
+                <div className="p-4 rounded shadow-md text-center">
+                    <h3 className="text-lg font-semibold">Adhoc Tasks</h3>
+                    <p className="text-2xl font-bold text-green-700">{adhocCount}</p>
                 </div>
                 <button
-                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full"
+                    className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 w-full hover:cursor-pointer"
                     onClick={() => setIsModalOpen(true)}
                 >
                     + Create Task
                 </button>
             </div>
 
-            <div className="mt-6 bg-white p-4 rounded shadow-md">
-                <h3 className="text-lg font-semibold text-gray-800 mb-3">Your Tasks</h3>
+            <div className="mt-6 p-4 rounded shadow-md">
+                <h3 className="text-lg font-semibold mb-3">Your Tasks</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     {tasks.map(task => (
-                        <div key={task._id} className="bg-gray-50 p-4 rounded-lg shadow-md flex flex-col">
+                        <div key={task._id} className="p-4 rounded-lg shadow-md flex flex-col">
                             <h4 className={`text-lg font-semibold ${task.type === "habit" ? "text-blue-500" : "text-green-500"}`}>
                                 {task.title}
                             </h4>

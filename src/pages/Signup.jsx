@@ -37,7 +37,7 @@ function Signup() {
 
     return (
         <div className="min-h-screen flex items-center justify-center">
-            <div className="bg-white shadow-lg p-6 rounded-lg">
+            <div className="shadow-lg p-6 rounded-lg">
                 <h2 className="text-2xl font-bold mb-4">Sign Up</h2>
                 <form onSubmit={handleSignup}>
                     <InputField type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -51,7 +51,7 @@ function Signup() {
                     </button>
                 </form>
                 <p className="mt-2">
-                    Already have an account? <Link to="/" className="text-blue-500">Login</Link>
+                    Already have an account? <Link to="/" className="text-green-500">Login</Link>
                 </p>
             </div>
         </div>

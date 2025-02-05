@@ -30,7 +30,7 @@ function Login() {
 
     return (
         <div className="min-h-screen flex items-center justify-center">
-            <div className="bg-white shadow-lg p-6 rounded-lg">
+            <div className="shadow-lg p-6 rounded-lg">
                 <h2 className="text-2xl font-bold mb-4">Login</h2>
                 <form onSubmit={handleLogin}>
                     <input
