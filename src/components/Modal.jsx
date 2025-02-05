@@ -9,6 +9,7 @@ const Modal = ({ isOpen, onClose, title, description, children }) => {
                 p-4 sm:p-8 rounded-lg shadow-lg w-[90%] sm:max-w-[500px] max-h-[90vh] overflow-auto"
                 aria-describedby="modal-description"
             >
+                {/* ✅ Title */}
                 <Dialog.Title className="text-xl font-semibold mb-2">{title}</Dialog.Title>
 
                 {description && (

@@ -43,11 +43,49 @@ function Dashboard() {
                 if (!countdownRefs.current[task._id]) {
                     countdownRefs.current[task._id] = "";
                 }
+                if(task.type === "habit" && task.habitTime){
+                    scheduleNotification(task);
+                }
             });
         } catch (error) {
             console.error("Error fetching tasks:", error.response?.data?.message || "Something went wrong");
         }
     };
+
+    const scheduleNotification = (task) => {
+        if ("serviceWorker" in navigator && "PushManager" in window) {
+            navigator.serviceWorker.ready.then(swReg => {
+                const now = new Date();
+                const [hours, minutes] = task.habitTime.split(":").map(Number);
+
+                const nextOccurrence = new Date();
+                nextOccurrence.setHours(hours - 1, minutes, 0, 0); // 🔹 1
+
+                const timeUntilNotification = nextOccurrence - now;
+
+                if (timeUntilNotification > 0) {
+                    setTimeout(() => {
+                        swReg.showNotification("Reminder: Habit Task", {
+                            body: `It's almost time for your habit: ${task.title}`,
+                            icon: "/alchemy.svg",
+                        });
+                    }, timeUntilNotification);
+                }
+            });
+        }
+    };
+
+    useEffect(() => {
+        if ("Notification" in window && Notification.permission !== "granted") {
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    console.log("Notifications Allowed!");
+                } else {
+                    console.log("Notifications Denied!");
+                }
+            });
+        }
+    }, []);
 
     useEffect(() => {
         const validateAndFetchTasks = async () => {
@@ -166,7 +204,6 @@ function Dashboard() {
     }
     return (
         <div className={`min-h-screen p-6`}>
-
         <div className="flex justify-between items-center  p-4 rounded shadow-md">
                 <h2 className="text-xl font-semibold">Task Dashboard</h2>
                 <button
