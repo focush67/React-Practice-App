@@ -1,15 +1,15 @@
-import { StrictMode } from 'react'
-import { createRoot } from 'react-dom/client'
-import App from './App.jsx'
+import {StrictMode} from 'react';
+import {createRoot} from 'react-dom/client';
+import App from './App';
 
-if ("serviceWorker" in navigator) {
-    navigator.serviceWorker.register("/sw.js")
-        .then(reg => console.log("Service Worker Registered", reg))
-        .catch(err => console.log("Service Worker Error", err));
+const rootElement = document.getElementById('root');
+if(!rootElement) {
+    console.log("Root Element is undefined. Failed to render application");
 }
-
-createRoot(document.getElementById('root')).render(
-  <StrictMode>
-    <App />
-  </StrictMode>,
-)
+else{
+    createRoot(rootElement).render(
+        <StrictMode>
+            <App/>
+        </StrictMode>
+    )
+}

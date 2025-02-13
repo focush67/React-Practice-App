@@ -8,9 +8,11 @@ import "./index.css";
 import AuthRedirect from "./components/AuthRedirect.jsx";
 import ProtectedRoute from "./components/ProtectedRoute.jsx";
 import { Toaster } from "react-hot-toast";
+import useServiceWorker from "./hooks/useServiceWorker";
 
 function App() {
-    const [darkMode, setDarkMode] = useState(localStorage.getItem("darkMode") === "true");
+    const getInitialDarkMode = localStorage.getItem("darkMode") === "true";
+    const [darkMode, setDarkMode] = useState(getInitialDarkMode);
 
     useEffect(() => {
         if (darkMode) {
@@ -18,8 +20,14 @@ function App() {
         } else {
             document.documentElement.classList.remove("dark");
         }
-        localStorage.setItem("darkMode", darkMode);
+        const storedDarkMode = localStorage.getItem("darkMode") === "true";
+        if(storedDarkMode !== darkMode){
+            localStorage.setItem("darkMode",darkMode);
+        }
     }, [darkMode]);
+
+    useServiceWorker();
+
 
     return (
         <>

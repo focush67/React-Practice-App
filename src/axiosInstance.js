@@ -1,7 +1,8 @@
 import axios from "axios";
-
+const LOCAL_BACKEND_URL = "http://localhost:3000";
+const PRODUCTION_BACKEND_URL =  "https://user-registration-backend-vxd9.onrender.com";
 const API = axios.create({
-    baseURL: "https://user-registration-backend-vxd9.onrender.com/api",
+    baseURL: `${PRODUCTION_BACKEND_URL}/api`,
     headers:{
         "Content-Type":"application/json"
     }

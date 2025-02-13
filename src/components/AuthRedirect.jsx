@@ -1,7 +1,7 @@
 import { Navigate, Outlet } from "react-router-dom";
-
+import useLocalToken from "../hooks/useLocalToken.js";
 const AuthRedirect = () => {
-    const token = localStorage.getItem("token");
+    const {token} = useLocalToken();
     return token ? <Navigate to="/dashboard" replace /> : <Outlet />;
 };
 
